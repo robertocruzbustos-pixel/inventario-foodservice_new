@@ -59,7 +59,7 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({
-    nombre: '', categoria: 'Equipamiento', cantidad: 0, stockMinimo: 5, descripcion: '', fotoBase64: '', marca: '', modelo: ''
+    nombre: '', categoria: 'Equipamiento', cantidad: 0, stockMinimo: 5, descripcion: '', fotoBase64: '', marca: '', modelo: '', notas: ''
   });
   const [isSaving, setIsSaving] = useState(false);
 
@@ -107,7 +107,7 @@ export default function App() {
 
   const handleOpenModal = (item = null) => {
     setEditingItem(item);
-    setFormData(item ? { ...item } : { nombre: '', categoria: 'Equipamiento', cantidad: 0, stockMinimo: 5, descripcion: '', fotoBase64: '', marca: '', modelo: '' });
+    setFormData(item ? { ...item } : { nombre: '', categoria: 'Equipamiento', cantidad: 0, stockMinimo: 5, descripcion: '', fotoBase64: '', marca: '', modelo: '', notas: '' });
     setIsModalOpen(true);
   };
 
@@ -258,7 +258,7 @@ export default function App() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-slate-950/90 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-           <form onSubmit={handleSave} className="bg-slate-900 p-6 rounded-2xl w-full max-w-sm border border-slate-700 shadow-2xl space-y-4">
+           <form onSubmit={handleSave} className="bg-slate-900 p-6 rounded-2xl w-full max-w-sm border border-slate-700 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
              <h3 className="text-xl font-bold text-slate-100 mb-4">{editingItem ? 'Editar Artículo' : 'Nuevo Artículo'}</h3>
              
              <div className="flex justify-center mb-4">
@@ -279,6 +279,16 @@ export default function App() {
              <select value={formData.categoria} onChange={e => setFormData({...formData, categoria: e.target.value})} className="w-full bg-slate-950 border border-slate-800 text-slate-200 p-3 rounded-lg focus:border-emerald-500 outline-none">
                {CATEGORIAS.map(c => <option key={c} value={c}>{c}</option>)}
              </select>
+
+             <div className="flex gap-4">
+                <div className="flex-1">
+                   <input type="text" placeholder="Marca (Opcional)" value={formData.marca || ''} onChange={e => setFormData({...formData, marca: e.target.value})} className="w-full bg-slate-950 border border-slate-800 text-slate-200 p-3 rounded-lg outline-none focus:border-emerald-500" />
+                </div>
+                <div className="flex-1">
+                   <input type="text" placeholder="Modelo (Opcional)" value={formData.modelo || ''} onChange={e => setFormData({...formData, modelo: e.target.value})} className="w-full bg-slate-950 border border-slate-800 text-slate-200 p-3 rounded-lg outline-none focus:border-emerald-500" />
+                </div>
+             </div>
+
              <div className="flex gap-4">
                 <div className="flex-1">
                    <label className="text-xs text-slate-500 mb-1 block">Cantidad</label>
@@ -289,6 +299,8 @@ export default function App() {
                    <input type="number" required value={formData.stockMinimo} onChange={e => setFormData({...formData, stockMinimo: e.target.value})} className="w-full bg-slate-950 border border-slate-800 text-slate-200 p-3 rounded-lg outline-none focus:border-emerald-500" />
                 </div>
              </div>
+             
+             <textarea placeholder="Notas u observaciones..." rows="2" value={formData.notas || ''} onChange={e => setFormData({...formData, notas: e.target.value})} className="w-full bg-slate-950 border border-slate-800 text-slate-200 p-3 rounded-lg outline-none focus:border-emerald-500 resize-none"></textarea>
              
              <div className="flex gap-3 pt-4 mt-2 border-t border-slate-800">
                <button type="button" onClick={handleCloseModal} className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg font-medium transition-colors">Cancelar</button>
